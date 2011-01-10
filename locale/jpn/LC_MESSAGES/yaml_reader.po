@@ -1,0 +1,23 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-01-10 11:17+0900\n"
+"PO-Revision-Date: 2011-01-10 11:24+0900\n"
+"Last-Translator: hiromi <tanaka2424@gmail.com>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: \libs\yaml_reader.php:52
+msgid "The path was not specified or is wrong."
+msgstr "パスが指定されていないか不正です。"
+
+#: \libs\yaml_reader.php:65
+msgid "Could not load Spyc class."
+msgstr "Spycクラスをロードできませんでした。"
+
