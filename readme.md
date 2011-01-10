@@ -10,6 +10,8 @@ or in current directory of your repository,
 
 	git submodule add git://github.com/hiromi2424/yaml_reader.git plugins/yaml_reader
 
+This contains Spyc verstion 0.4.5, but you want to use any version of Spyc, install it to your vendors directory.
+
 ## Usage
 
 ### in App/config/bootstrap.php:
