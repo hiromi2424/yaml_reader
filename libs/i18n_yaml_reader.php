@@ -1,6 +1,6 @@
 <?php
 
-App::import('Lib', 'YamlReader.I18nYamlReader');
+App::import('Lib', 'YamlReader.YamlReader');
 
 /**
  * I18nYamlReader file
