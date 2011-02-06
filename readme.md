@@ -28,13 +28,13 @@ then,
 
 	Configure::load('config_file_name_without_extension', 'your_config_name');
 
-by default, Config's name is applied to configured array, for example:
+By default, Config's name is applied to configured array, for example:
 
 	Configure::read('your_config_name');
 
-this can be disabled by arguments of constructor:
+This can be disabled by arguments of constructor:
 
-	new YamlReader(null, false);
+	new YamlReader(CONFIGS, false); // default path is CONFIGS
 	new YamlReader(/your/path/for/config/', false);
 	new YamlReader(array('path' => '/your/path/for/config/, 'baseKey' => false)); // specifying 'path' is required
 
@@ -42,6 +42,18 @@ or changing property:
 
 	$YamlReader = new YamlReader;
 	$YamlReader->baseKey = false;
+
+#### I18n
+
+If you want to use i18n in each string values, you can use I18nYamlReader:
+
+	new I18nYamlReader; // __()
+	new I18nYamlReader(CONFIGS, false, 'your_locale_domain'); // __d()
+
+	App::import('Lib', 'YamlReader.I18nYamlReader');
+	$I18nYamlReader = new I18nYamlReader;
+	$I18nYamlReader->domain = 'your_locale_domain';
+	Configure::config('I18n', $I18nYamlReader);
 
 ## License
 

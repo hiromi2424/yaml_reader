@@ -17,3 +17,7 @@ msgstr ""
 #: \libs\yaml_reader.php:52
 msgid "The path was not specified or is wrong."
 msgstr ""
+
+#: \libs\yaml_reader.php:65
+msgid "Could not load Spyc class."
+msgstr ""

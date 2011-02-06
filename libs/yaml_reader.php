@@ -18,6 +18,7 @@
  *
  */
 class YamlReader implements ConfigReaderInterface {
+
 /**
  * The extension of files to be loaded, without period.
  *
@@ -29,6 +30,7 @@ class YamlReader implements ConfigReaderInterface {
  * The path this reader finds files on.
  *
  * @var string
+ * @access protected
  */
 	protected $_path = null;
 
@@ -43,9 +45,11 @@ class YamlReader implements ConfigReaderInterface {
  * Constructor for YAML Config file reading.
  *
  * @param string $path The path to read config files from.  Defaults to CONFIGS
+ * @param string $baseKey If true, assoc key was applied to parsed array with specific key.
  * @throws ConfigureException when Spyc class doesn't exsist or specified path was wrong.
  */
 	public function __construct($path = CONFIGS, $baseKey = null) {
+
 		if (is_array($path)) {
 			extract($path);
 			if (!is_string($path)) {
@@ -60,6 +64,7 @@ class YamlReader implements ConfigReaderInterface {
 		if (!App::import('Vendor', 'Spyc')) {
 			App::import('Vendor', 'YamlReader.Spyc');
 		}
+
 	}
 
 /**
@@ -75,6 +80,7 @@ class YamlReader implements ConfigReaderInterface {
  * @throws ConfigureException when files doesn't exist or when files contain '..' as this could lead to abusive reads.
  */
 	public function read($key) {
+
 		if (strpos($key, '..') !== false) {
 			throw new ConfigureException(__('Cannot load configuration files with ../ in them.'));
 		}
@@ -87,11 +93,15 @@ class YamlReader implements ConfigReaderInterface {
 		if (!file_exists($filePath)) {
 			throw new ConfigureException(__('Could not load configuration file: ') . $filePath);
 		}
+
 		$config = Spyc::YAMLLoad($filePath);
 
 		if ($this->baseKey) {
 			$config = array($key => $config);
 		}
+
 		return $config;
+
 	}
+
 }
