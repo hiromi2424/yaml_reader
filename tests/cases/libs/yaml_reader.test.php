@@ -4,13 +4,22 @@ App::import('Lib', 'YamlReader.YamlReader');
 
 class YamlReaderTestCase extends CakeTestCase {
 
-	public function tearDown() {
-		parent::tearDown();
+	public function startTest() {
+
+		$this->_config = Configure::read();
+
+	}
+
+	public function endTest() {
+
 		foreach (Configure::configured() as $config) {
-			if (strpos($config, 'YamlReader') !== false) {
+			if (strpos($config, 'YamlTestConfig') !== false) {
 				Configure::drop($config);
 			}
 		}
+
+		Configure::write($this->_config);
+
 	}
 
 	protected function _configTestFile($path = null, $baseKey = null) {
@@ -46,13 +55,6 @@ class YamlReaderTestCase extends CakeTestCase {
 	}
 
 	public function testErrors() {
-		try {
-			$this->_configTestFile(array());
-			$this->fail('Exception was not thrown');
-		} catch (Exception $e) {
-			$this->assertIsA($e, 'ConfigureException');
-			$this->assertIdentical($e->getMessage(), __d('yaml_reader', 'The path was not specified or is wrong.'));
-		}
 
 		$this->_configTestFile();
 		try {

@@ -4,32 +4,51 @@ App::import('Lib', 'YamlReader.I18nYamlReader');
 
 class I18nYamlReaderTestCase extends CakeTestCase {
 
-	public function tearDown() {
+	protected $_config;
 
-		parent::tearDown();
+	public function startTest() {
+
+		$this->_config = Configure::read();
+
+		Configure::write('Config.language', 'ja');
+		Cache::drop('_cake_core_');
+		I18n::clear();
+		App::build(array(
+			'locales' => array(App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS . 'locale' . DS),
+		), true);
+
+	}
+
+	public function endTest() {
 
 		foreach (Configure::configured() as $config) {
 			if (strpos($config, 'I18nYamlTestConfig') !== false) {
 				Configure::drop($config);
 			}
 		}
+		I18n::clear();
+		App::build();
+
+		foreach (array_keys(Configure::read()) as $key) {
+			Configure::delete($key);
+		}
+		Configure::write($this->_config);
 
 	}
 
-	protected function _configTestFile($path = null, $baseKey = null, $domain = null) {
+	protected function _configTestFile($domain = null, $path = null, $baseKey = null) {
 
 		if ($path === null) {
 			$path = App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS;
 		}
 
-		Configure::config('I18nYamlTestConfig', new I18nYamlReader($path, $baseKey, $domain));
+		Configure::config('I18nYamlTestConfig', new I18nYamlReader($domain, $path, $baseKey));
 
 	}
 
 	public function testRead() {
 
-		Configure::write('Config.language', 'ja');
-		$this->_configTestFile(null, null, 'yaml_reader');
+		$this->_configTestFile('yaml_reader');
 		Configure::load('i18n', 'I18nYamlTestConfig');
 
 		$expected = 'パスが指定されていないか不正です。';
@@ -46,13 +65,6 @@ class I18nYamlReaderTestCase extends CakeTestCase {
 	}
 
 	public function testApplyGettext() {
-
-		Configure::write('Config.language', 'ja');
-		Cache::drop('_cake_core_');
-		I18n::clear();
-		App::build(array(
-			'locales' => array(App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS . 'locale' . DS),
-		), true);
 
 		$Reader = new I18nYamlReader;
 

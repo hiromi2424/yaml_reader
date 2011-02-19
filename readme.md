@@ -14,7 +14,15 @@ This contains Spyc verstion 0.4.5, but you want to use any version of Spyc, inst
 
 ## Usage
 
-### in App/config/bootstrap.php:
+
+### Create YAML file
+
+Create `App/config/your_config_name.yml` for configure. this ext 'yml' is default, you can change this to set `$ext` property.
+or create `plugins/your_plugin/config/your_config_name.yml` if you wanna use this in your plugin.
+
+### Configure
+
+in `App/config/bootstrap.php`:
 
 	App::import('Lib', 'YamlReader.YamlReader');
 	Configure::config('your_config_name', new YamlReader);
@@ -30,25 +38,26 @@ then,
 
 By default, Config's name is applied to configured array, for example:
 
-	Configure::read('your_config_name');
+	Configure::read('your_config_name'); // when your_config_name.yml is loaded
 
 This can be disabled by arguments of constructor:
 
 	new YamlReader(CONFIGS, false); // default path is CONFIGS
 	new YamlReader(/your/path/for/config/', false);
-	new YamlReader(array('path' => '/your/path/for/config/, 'baseKey' => false)); // specifying 'path' is required
+	new YamlReader(array('baseKey' => false));
 
 or changing property:
 
 	$YamlReader = new YamlReader;
 	$YamlReader->baseKey = false;
 
-#### I18n
+### I18n
 
-If you want to use i18n in each string values, you can use I18nYamlReader:
+If you want to use i18n in each string values, you can use `I18nYamlReader`:
 
 	new I18nYamlReader; // __()
-	new I18nYamlReader(CONFIGS, false, 'your_locale_domain'); // __d()
+	new I18nYamlReader('your_locale_domain'); // __d()
+	new I18nYamlReader('your_locale_domain', CONFIGS, false); // like YamlReader arguments
 
 	App::import('Lib', 'YamlReader.I18nYamlReader');
 	$I18nYamlReader = new I18nYamlReader;

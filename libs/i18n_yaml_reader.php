@@ -25,24 +25,23 @@ class I18nYamlReader extends YamlReader {
  * The domain this reader use for i18n.
  *
  * @var mixed null or string domain name
- * @access protected
  */
 	public $domain = null;
 
 /**
  * Constructor for i18n'ed Yaml.
  *
+ * @param mixed $domain null or string domain name
  * @param string $path The path to read config files from.  Defaults to CONFIGS
  * @param string $baseKey If true, assoc key was applied to parsed array with specific key.
- * @param mixed $domain null or string domain name
  * @throws ConfigureException when Spyc class doesn't exsist or specified path was wrong.
  */
-	public function __construct($path = CONFIGS, $baseKey = null, $domain = null) {
+	public function __construct($domain = null, $path = CONFIGS, $baseKey = null) {
 
 		parent::__construct($path, $baseKey);
 
-		if (is_array($path)) {
-			extract($path);
+		if (is_array($domain)) {
+			extract($domain);
 		}
 
 		if (isset($domain)) {
