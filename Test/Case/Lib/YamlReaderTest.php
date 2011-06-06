@@ -1,6 +1,6 @@
 <?php
 
-App::import('Lib', 'YamlReader.YamlReader');
+App::uses('YamlReader', 'YamlReader.Configure');
 
 class YamlReaderTestCase extends CakeTestCase {
 
@@ -24,7 +24,7 @@ class YamlReaderTestCase extends CakeTestCase {
 
 	protected function _configTestFile($path = null, $baseKey = null) {
 		if ($path === null) {
-			$path = App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS;
+			$path = CakePlugin::path('YamlReader') . 'Test' . DS . 'files' . DS;
 		}
 		Configure::config('YamlTestConfig', new YamlReader($path, $baseKey));
 	}
@@ -44,8 +44,9 @@ class YamlReaderTestCase extends CakeTestCase {
 		);
 		$this->assertIdentical(Configure::read('spyc.databases'), $expected);
 		Configure::drop('YamlTestConfig');
+		Configure::delete('spyc');
 
-		$this->_configTestFile(array('path' => App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS));
+		$this->_configTestFile(array('path' => App::pluginPath('YamlReader') . 'Test' . DS . 'files' . DS));
 		Configure::load('spyc', 'YamlTestConfig');
 		$this->assertIdentical(Configure::read('spyc.databases'), $expected);
 

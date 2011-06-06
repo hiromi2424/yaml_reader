@@ -48,13 +48,13 @@ class YamlReader implements ConfigReaderInterface {
  * @param string $baseKey If true, assoc key was applied to parsed array with specific key.
  * @throws ConfigureException when Spyc class doesn't exsist or specified path was wrong.
  */
-	public function __construct($path = CONFIGS, $baseKey = null) {
+	public function __construct($path = null, $baseKey = null) {
 
 		if (is_array($path)) {
 			extract($path);
 		}
 		if (empty($path) || is_array($path)) {
-			$path = CONFIGS;
+			$path = APP . 'Config' . DS;
 		}
 		$this->_path = $path;
 
@@ -72,16 +72,16 @@ class YamlReader implements ConfigReaderInterface {
  *
  *
  * @param string $key The identifier to read from.  If the key has a . it will be treated
- *   as a plugin prefix.
+ *   as a plugin prefix. path extension is not needed by default, but possible to specify
+ *   your own extension, e.g. Configure::load('Hoge.yaml', new YamlReader);
  * @return array Parsed configuration values.
  * @throws ConfigureException when files doesn't exist or when files contain '..' as this could lead to abusive reads.
  */
 	public function read($key) {
 
+		App::uses('Spyc', 'vendors');
 		if (!class_exists('Spyc')) {
-			if (!App::import('Vendor', 'Spyc')) {
-				App::import('Vendor', 'YamlReader.Spyc');
-			}
+			App::uses('Spyc', 'YamlReader.vendors');
 		}
 
 		if (strpos($key, '..') !== false) {
@@ -90,11 +90,13 @@ class YamlReader implements ConfigReaderInterface {
 		list($plugin, $key) = pluginSplit($key);
 
 		$path = $plugin ? App::pluginPath($plugin) . 'config' . DS : $this->_path;
-		$file = "$key.$this->ext";
-		$filePath = $path . $file;
+		$filePath = $path . $key;
 
 		if (!file_exists($filePath)) {
-			throw new ConfigureException(__('Could not load configuration file: ') . $filePath);
+			$filePath .= ".$this->ext";
+			if (!file_exists($filePath)) {
+				throw new ConfigureException(__('Could not load configuration file: ') . Debugger::trimPath($filePath));
+			}
 		}
 
 		$config = Spyc::YAMLLoad($filePath);

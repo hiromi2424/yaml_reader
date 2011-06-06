@@ -1,6 +1,6 @@
 <?php
 
-App::import('Lib', 'YamlReader.YamlReader');
+App::uses('YamlReader', 'YamlReader.Configure');
 
 /**
  * I18nYamlReader file
@@ -36,15 +36,15 @@ class I18nYamlReader extends YamlReader {
  * @param string $baseKey If true, assoc key was applied to parsed array with specific key.
  * @throws ConfigureException when Spyc class doesn't exsist or specified path was wrong.
  */
-	public function __construct($domain = null, $path = CONFIGS, $baseKey = null) {
-
-		parent::__construct($path, $baseKey);
+	public function __construct($domain = null, $path = null, $baseKey = null) {
 
 		if (is_array($domain)) {
 			extract($domain);
 		}
 
-		if (isset($domain)) {
+		parent::__construct($path, $baseKey);
+
+		if (isset($domain) && !is_array($domain)) {
 			$this->domain = $domain;
 		}
 

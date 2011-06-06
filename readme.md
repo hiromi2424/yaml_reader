@@ -4,13 +4,13 @@
 
 in your plugins directory,
 
-	git clone git://github.com/hiromi2424/yaml_reader.git
+	git clone git://github.com/hiromi2424/yaml_reader.git YamlReader
 
 or in current directory of your repository,
 
-	git submodule add git://github.com/hiromi2424/yaml_reader.git plugins/yaml_reader
+	git submodule add git://github.com/hiromi2424/yaml_reader.git plugins/YamlReader
 
-This contains Spyc verstion 0.4.5, but you want to use any version of Spyc, install it to your vendors directory.
+This contains Spyc verstion 0.4.5, but you want to use any version of Spyc, install it to your vendors directory(app/Vendor/Spyc.php).
 
 ## Usage
 
@@ -24,12 +24,12 @@ or create `plugins/your_plugin/config/your_config_name.yml` if you wanna use thi
 
 in `App/config/bootstrap.php`:
 
-	App::import('Lib', 'YamlReader.YamlReader');
+	App::uses('YamlReader', 'YamlReader.Configure');
 	Configure::config('your_config_name', new YamlReader);
 
 or
 
-	App::import('Lib', 'YamlReader.YamlReader');
+	App::uses('YamlReader', 'YamlReader.Configure');
 	Configure::config('your_config_name', new YamlReader('/your/path/for/config/'));
 
 then,
@@ -42,8 +42,8 @@ By default, Config's name is applied to configured array, for example:
 
 This can be disabled by arguments of constructor:
 
-	new YamlReader(CONFIGS, false); // default path is CONFIGS
-	new YamlReader(/your/path/for/config/', false);
+	new YamlReader(null, false); // default path is app/Config/
+	new YamlReader('/your/path/for/config/', false);
 	new YamlReader(array('baseKey' => false));
 
 or changing property:
@@ -57,9 +57,9 @@ If you want to use i18n in each string values, you can use `I18nYamlReader`:
 
 	new I18nYamlReader; // __()
 	new I18nYamlReader('your_locale_domain'); // __d()
-	new I18nYamlReader('your_locale_domain', CONFIGS, false); // like YamlReader arguments
+	new I18nYamlReader('your_locale_domain', null, false); // like YamlReader arguments
 
-	App::import('Lib', 'YamlReader.I18nYamlReader');
+	App::uses('I18nYamlReader', 'YamlReader.Configure');
 	$I18nYamlReader = new I18nYamlReader;
 	$I18nYamlReader->domain = 'your_locale_domain';
 	Configure::config('I18n', $I18nYamlReader);

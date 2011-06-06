@@ -1,6 +1,6 @@
 <?php
 
-App::import('Lib', 'YamlReader.I18nYamlReader');
+App::uses('I18nYamlReader', 'YamlReader.Configure');
 
 class I18nYamlReaderTestCase extends CakeTestCase {
 
@@ -14,7 +14,7 @@ class I18nYamlReaderTestCase extends CakeTestCase {
 		Cache::drop('_cake_core_');
 		I18n::clear();
 		App::build(array(
-			'locales' => array(App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS . 'locale' . DS),
+			'locales' => array(App::pluginPath('YamlReader') . 'Test' . DS . 'files' . DS . 'Locale' . DS),
 		), true);
 
 	}
@@ -39,7 +39,7 @@ class I18nYamlReaderTestCase extends CakeTestCase {
 	protected function _configTestFile($domain = null, $path = null, $baseKey = null) {
 
 		if ($path === null) {
-			$path = App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS;
+			$path = App::pluginPath('YamlReader') . 'Test' . DS . 'files' . DS;
 		}
 
 		Configure::config('I18nYamlTestConfig', new I18nYamlReader($domain, $path, $baseKey));
@@ -55,7 +55,8 @@ class I18nYamlReaderTestCase extends CakeTestCase {
 		$result = Configure::read('i18n.hoge.fuga');
 		$this->assertEqual($expected, $result);
 
-		$this->_configTestFile(array('path' => App::pluginPath('YamlReader') . 'tests' . DS . 'files' . DS, 'domain' => 'yaml_reader'));
+		$result = Configure::delete('i18n');
+		$this->_configTestFile(array('path' => App::pluginPath('YamlReader') . 'Test' . DS . 'files' . DS, 'domain' => 'yaml_reader'));
 		Configure::load('i18n', 'I18nYamlTestConfig');
 
 		$expected = 'パスが指定されていないか不正です。';
