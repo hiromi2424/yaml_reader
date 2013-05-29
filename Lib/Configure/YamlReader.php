@@ -84,13 +84,7 @@ class YamlReader implements ConfigReaderInterface {
 			App::uses('Spyc', 'YamlReader.vendors');
 		}
 
-		if (strpos($key, '..') !== false) {
-			throw new ConfigureException(__('Cannot load configuration files with ../ in them.'));
-		}
-		list($plugin, $key) = pluginSplit($key);
-
-		$path = $plugin ? App::pluginPath($plugin) . 'config' . DS : $this->_path;
-		$filePath = $path . $key;
+		$filePath = $this->_getFilePath($key);
 
 		if (!file_exists($filePath)) {
 			$filePath .= ".$this->ext";
@@ -107,6 +101,44 @@ class YamlReader implements ConfigReaderInterface {
 
 		return $config;
 
+	}
+
+/**
+ * Get file path
+ *
+ * @param string $key The identifier to write to. If the key has a . it will be treated
+ *  as a plugin prefix.
+ * @return string Full file path
+ */
+	protected function _getFilePath($key) {
+		if (strpos($key, '..') !== false) {
+			throw new ConfigureException(__('Cannot load configuration files with ../ in them.'));
+		}
+		list($plugin, $key) = pluginSplit($key);
+
+		$path = $plugin ? App::pluginPath($plugin) . 'Config' . DS : $this->_path;
+		$filePath = $path . $key;
+
+		return $filePath;
+	}
+
+/**
+ * Converts the provided $data into a string of PHP code that can
+ * be used saved into a file and loaded later.
+ *
+ * @param string $key The identifier to write to. If the key has a . it will be treated
+ *  as a plugin prefix.
+ * @param array $data Data to dump.
+ * @return int Bytes saved.
+ */
+	public function dump($key, $data) {
+		$contents = Spyc::YAMLDump($data);
+
+		$filename = $this->_getFilePath($key);
+		if (substr($filename, -4) !== ".$this->ext") {
+			$filename .= ".$this->ext";
+		}
+		return file_put_contents($filename, $contents);
 	}
 
 }

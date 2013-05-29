@@ -6,7 +6,8 @@ class I18nYamlReaderTestCase extends CakeTestCase {
 
 	protected $_config;
 
-	public function startTest() {
+	public function setUp() {
+		parent::setUp();
 
 		$this->_config = Configure::read();
 
@@ -19,7 +20,8 @@ class I18nYamlReaderTestCase extends CakeTestCase {
 
 	}
 
-	public function endTest() {
+	public function tearDown() {
+		parent::tearDown();
 
 		foreach (Configure::configured() as $config) {
 			if (strpos($config, 'I18nYamlTestConfig') !== false) {

@@ -4,13 +4,14 @@ App::uses('YamlReader', 'YamlReader.Configure');
 
 class YamlReaderTestCase extends CakeTestCase {
 
-	public function startTest() {
+	public function setUp() {
 
+		parent::setUp();
 		$this->_config = Configure::read();
 
 	}
 
-	public function endTest() {
+	public function tearDown() {
 
 		foreach (Configure::configured() as $config) {
 			if (strpos($config, 'YamlTestConfig') !== false) {
@@ -19,6 +20,7 @@ class YamlReaderTestCase extends CakeTestCase {
 		}
 
 		Configure::write($this->_config);
+		parent::tearDown();
 
 	}
 
@@ -74,4 +76,20 @@ class YamlReaderTestCase extends CakeTestCase {
 			$this->assertIdentical($e->getMessage(), __('Cannot load configuration files with ../ in them.'));
 		}
 	}
+
+	public function testDump() {
+		$this->_configTestFile(TMP);
+		Configure::write('TestYaml', 'test');
+		$result = Configure::dump('YamlReaderTest', 'YamlTestConfig', array('TestYaml'));
+		$this->assertTrue(!empty($result));
+
+		$fileExpected = TMP . 'YamlReaderTest.yml';
+		$result = file_exists($fileExpected);
+		$this->assertTrue($result);
+
+		if ($result) {
+			unlink($fileExpected);
+		}
+	}
+
 }
